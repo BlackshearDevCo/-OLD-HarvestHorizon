@@ -1,0 +1,125 @@
+[gd_scene load_steps=10 format=3 uid="uid://mo4n5e2aekwd"]
+
+[ext_resource type="Script" path="res://scripts/Player.gd" id="1_ejqp6"]
+[ext_resource type="Texture2D" uid="uid://bnun55mbnvqge" path="res://assets/Kenny/tilemaps/tilemap-characters.png" id="2_6mmy4"]
+[ext_resource type="PackedScene" uid="uid://c4cylbgm2bgcu" path="res://scenes/Inventory_UI.tscn" id="3_ssmlh"]
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_jephq"]
+atlas = ExtResource("2_6mmy4")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_36rkv"]
+atlas = ExtResource("2_6mmy4")
+region = Rect2(25, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kf8ik"]
+atlas = ExtResource("2_6mmy4")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_1qra8"]
+atlas = ExtResource("2_6mmy4")
+region = Rect2(25, 0, 24, 24)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_yp8gu"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_jephq")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_36rkv")
+}],
+"loop": true,
+"name": &"sprint",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kf8ik")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_1qra8")
+}],
+"loop": true,
+"name": &"walk",
+"speed": 5.0
+}]
+
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_y26mk"]
+radius = 7.0
+height = 18.0
+
+[node name="Player" type="CharacterBody2D" groups=["Player"]]
+process_mode = 3
+script = ExtResource("1_ejqp6")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+sprite_frames = SubResource("SpriteFrames_yp8gu")
+animation = &"walk"
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(0, 3)
+shape = SubResource("CapsuleShape2D_y26mk")
+
+[node name="Camera2D" type="Camera2D" parent="."]
+zoom = Vector2(3, 3)
+limit_left = 0
+limit_top = 0
+limit_right = 2424
+
+[node name="Dummy Button" type="CanvasLayer" parent="."]
+
+[node name="Control" type="Control" parent="Dummy Button"]
+layout_mode = 3
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_top = -53.0
+offset_bottom = -53.0
+grow_horizontal = 2
+grow_vertical = 0
+
+[node name="Button" type="Button" parent="Dummy Button/Control"]
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -150.0
+offset_top = -25.0
+offset_right = 150.0
+offset_bottom = 25.0
+grow_horizontal = 2
+grow_vertical = 2
+text = "Buy Seeds"
+
+[node name="InventoryUI" type="CanvasLayer" parent="."]
+visible = false
+
+[node name="ColorRect" type="ColorRect" parent="InventoryUI"]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0.113725, 0.270588, 0.227451, 1)
+
+[node name="Label" type="Label" parent="InventoryUI/ColorRect"]
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -37.5
+offset_top = 50.0
+offset_right = 37.5
+offset_bottom = 73.0
+grow_horizontal = 2
+theme_override_font_sizes/font_size = 60
+text = "INVENTORY"
+
+[node name="Inventory_UI" parent="InventoryUI/ColorRect" instance=ExtResource("3_ssmlh")]
+
+[connection signal="pressed" from="Dummy Button/Control/Button" to="." method="_on_button_pressed"]
